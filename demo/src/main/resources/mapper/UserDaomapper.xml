@@ -2,24 +2,24 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.demo.dao.UserDao">
     <resultMap id="userMap" type="com.example.demo.domain.SysUser">
-        <id property="id" column="ID"/>
+        <id property="id" column="user_id"/>
         <result property="username" column="username"/>
         <result property="password" column="PASSWORD"/>
         <collection property="roles" ofType="com.example.demo.domain.SysRole">
-            <result column="name" property="name"/>
+            <result column="role_name" property="name"/>
         </collection>
 
     </resultMap>
     <select id="findByUserName" parameterType="String" resultMap="userMap">
         select u.*
-        ,r.name
+        ,r.role_name
         from Sys_User u
-        LEFT JOIN sys_role_user sru on u.id= sru.Sys_User_id
-        LEFT JOIN Sys_Role r on sru.Sys_Role_id=r.id
+        LEFT JOIN sys_role_user sru on u.user_id= sru.Sys_User_id
+        LEFT JOIN Sys_Role r on sru.Sys_Role_id=r.role_id
         where username= #{username}
     </select>
 
     <select id="getById" parameterType="int" resultMap="userMap">
-        SELECT * FROM Sys_User WHERE id =#{id}
+        SELECT * FROM Sys_User WHERE id =#{user_id}
     </select>
 </mapper>

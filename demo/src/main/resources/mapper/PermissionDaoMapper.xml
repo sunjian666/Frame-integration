@@ -9,18 +9,64 @@
     <select id="findByAdminUserId" parameterType="int" resultType="com.example.demo.domain.Permission">
          select p.*
         from Sys_User u
-        LEFT JOIN sys_role_user sru on u.id= sru.Sys_User_id
-        LEFT JOIN Sys_Role r on sru.Sys_Role_id=r.id
-        LEFT JOIN Sys_permission_role spr on spr.sys_role_id=r.id
-        LEFT JOIN Sys_permission p on p.id =spr.sys_permission_id
-        where u.id=#{userId}
+        LEFT JOIN sys_role_user sru on u.user_id= sru.Sys_User_id
+        LEFT JOIN Sys_Role r on sru.Sys_Role_id=r.role_id
+        LEFT JOIN Sys_permission_role spr on spr.sys_role_id=r.role_id
+        LEFT JOIN Sys_permission p on p.permission_id =spr.sys_permission_id
+        where u.user_id=#{userId}
     </select>
 
     <select id="findByAuth" parameterType="string" resultType="com.example.demo.dto.Auths">
         SELECT c.url,c.method
         FROM sys_role a
-        INNER JOIN sys_permission_role b ON a.id = b.sys_role_id
-        INNER JOIN sys_permission c ON b.sys_permission_id = c.id
-        WHERE a.`name` = #{auth}
+        INNER JOIN sys_permission_role b ON a.role_id = b.sys_role_id
+        INNER JOIN sys_permission c ON b.sys_permission_id = c.permission_id
+        WHERE a.role_name = #{auth}
     </select>
+
+    <insert id="insertPermissionFunction" parameterType="com.example.demo.domain.Function">
+        INSERT INTO sys_permission_function(function_name) VALUES (#{name});
+    </insert>
+
+    <update id="updatePermissionFunction">
+        UPDATE sys_permission_function SET function_name = #{name} WHERE function_id = #{id}
+    </update>
+    
+    <delete id="deletePermissionFunction" parameterType="int">
+        DELETE FROM sys_permission_function WHERE function_id = #{id}
+    </delete>
+
+    <select id="selectPermissionFunction" parameterType="int" resultMap="permissionMap">
+        SELECT * FROM sys_permission_function a
+        INNER JOIN sys_permission b ON a.function_id = b.sys_permission_function_id
+        <where>
+            <if test = "id != null">
+                function_id = #{id}
+            </if>
+        </where>
+    </select>
+
+    <resultMap id="permissionMap" type="com.example.demo.domain.Function">
+        <id property="id" column="function_id"/>
+        <result property="name" column="function_name"/>
+        <collection property="permissionList" ofType="com.example.demo.domain.Permission">
+            <id column="permission_id" property="id"/>
+            <result column="permission_name" property="name"/>
+            <result column="descritpion" property="descritpion"/>
+            <result column="url" property="url"/>
+            <result column="method" property="method"/>
+        </collection>
+    </resultMap>
+
+    <insert id="insertPermission" parameterType="com.example.demo.domain.Permission">
+        INSERT INTO sys_permission(permission_name, url, method, sys_permission_function_id) VALUES (#{name}, #{url}, #{method}, #{functionId});
+    </insert>
+
+    <update id="updatePermission">
+        UPDATE sys_permission_function SET name = #{permission_name}, url = #{url}, method = #{method}, sys_permission_function_id = #{functionId} WHERE permission_id = #{id}
+    </update>
+
+    <delete id="deletePermission" parameterType="int">
+        DELETE FROM sys_permission WHERE permission_id = #{id}
+    </delete>
 </mapper>

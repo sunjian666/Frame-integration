@@ -18,6 +18,8 @@ public class Permission {
     //请求方法
     private String method;
 
+    private Integer functionId;
+
     public int getId() {
         return id;
     }
@@ -64,5 +66,13 @@ public class Permission {
 
     public void setMethod(String method) {
         this.method = method;
+    }
+
+    public Integer getFunctionId() {
+        return functionId;
+    }
+
+    public void setFunctionId(Integer functionId) {
+        this.functionId = functionId;
     }
 }
