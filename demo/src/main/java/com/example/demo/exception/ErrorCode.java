@@ -11,7 +11,8 @@ public enum ErrorCode {
     FUNCTION_SELECT_ERROR("8087", "资源功能查询错误"),
     PERMISSION_INSERT_ERROR("8088", "资源插入错误"),
     PERMISSION_UPDATE_ERROR("8089", "资源更新错误"),
-    PERMISSION_DELETE_ERROR("8090", "资源删除错误"),;
+    PERMISSION_DELETE_ERROR("8090", "资源删除错误"),
+    PERMISSION_HISTORY_ERROR("8091", "历史资源查询错误");
 
     private String code;
     private String message;

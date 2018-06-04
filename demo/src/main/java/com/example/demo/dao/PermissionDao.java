@@ -24,4 +24,6 @@ public interface PermissionDao {
     void updatePermission(Permission permission);
     void deletePermission(Integer id);
 
+    List<Integer> selectPermissionHistory(@Param("name") String name);
+
 }

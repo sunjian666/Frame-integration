@@ -3,6 +3,7 @@ package com.example.demo.service;
 import com.example.demo.dao.PermissionDao;
 import com.example.demo.domain.Function;
 import com.example.demo.domain.Permission;
+import com.example.demo.dto.PermissionAndHistory;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -53,5 +54,19 @@ public class RoleAndPermissionServiceImpl implements RoleAndPermissionService{
     @Override
     public void deletePermission(Integer id) {
         permissionDao.deletePermission(id);
+    }
+
+    @Override
+    public PermissionAndHistory selectPermissionHistory(String roleName) {
+
+        List<Function> functions = permissionDao.selectPermissionFunction(null);
+        List<Integer> integers = permissionDao.selectPermissionHistory(roleName);
+
+        PermissionAndHistory permissionAndHistory = new PermissionAndHistory();
+
+            permissionAndHistory.setFunctionList(functions);
+            permissionAndHistory.setHistoryList(integers);
+
+        return permissionAndHistory;
     }
 }
