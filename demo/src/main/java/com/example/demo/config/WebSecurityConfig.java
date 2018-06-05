@@ -101,7 +101,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 //.apply(securityConfigurerAdapter())
                 .and()
                 .formLogin()
-                .loginPage("/login")
+                .loginPage("/login")  //设置登录时需要跳转的页面
+                .loginProcessingUrl("/login")  //设置登录表单提交接口与账号密码过滤器绑定
                 .failureUrl("/login?error")
                 .permitAll() //登录页面用户任意访问
                 .and()

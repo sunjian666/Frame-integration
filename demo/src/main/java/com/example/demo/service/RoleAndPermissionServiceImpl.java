@@ -1,10 +1,9 @@
 package com.example.demo.service;
 
-import com.example.demo.dao.PermissionDao;
+import com.example.demo.mapper.PermissionDao;
 import com.example.demo.domain.Function;
 import com.example.demo.domain.Permission;
 import com.example.demo.dto.PermissionAndHistory;
-import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;

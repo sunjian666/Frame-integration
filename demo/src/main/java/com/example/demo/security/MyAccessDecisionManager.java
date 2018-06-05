@@ -1,6 +1,6 @@
 package com.example.demo.security;
 
-import com.example.demo.dao.PermissionDao;
+import com.example.demo.mapper.PermissionDao;
 import com.example.demo.dto.Auths;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDecisionManager;
@@ -12,7 +12,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Collection;
@@ -44,6 +43,9 @@ public class MyAccessDecisionManager implements AccessDecisionManager{
 
             String url, method;
             AntPathRequestMatcher matcher;
+            System.out.println(authentication.getPrincipal());
+            System.out.println(authentication.getDetails());
+            System.out.println(authentication.getCredentials());
             if ("anonymousUser".equals(authentication.getPrincipal())
                     || matchers("/images/**", request)
                     || matchers("/js/**", request)
@@ -52,7 +54,6 @@ public class MyAccessDecisionManager implements AccessDecisionManager{
                     || matchers("/", request)
                     || matchers("/index.html", request)
                     || matchers("/favicon.ico", request)
-                    || matchers("/login", request)
                     || matchers("/refresh", request)) {
                 return;
             } else {

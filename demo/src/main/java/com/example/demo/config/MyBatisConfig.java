@@ -4,6 +4,7 @@ import org.apache.ibatis.logging.log4j.Log4jImpl;
 import org.apache.ibatis.type.JdbcType;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -15,6 +16,7 @@ import javax.sql.DataSource;
 @ComponentScan
 public class MyBatisConfig {
 
+    @Qualifier("dataSource")
     @Autowired
     private DataSource dataSource;
 
@@ -28,7 +30,7 @@ public class MyBatisConfig {
         configuration.setJdbcTypeForNull(JdbcType.NULL);
         configuration.setLogImpl(Log4jImpl.class);//use log4j log
         sessionFactory.setConfiguration(configuration);
-        sessionFactory.setMapperLocations(applicationContext.getResources("classpath*:mapper/*.xml"));
+        sessionFactory.setMapperLocations(applicationContext.getResources("classpath*:mapping/*.xml"));
         return sessionFactory;
     }
 

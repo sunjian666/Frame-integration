@@ -1,14 +1,12 @@
 package com.example.demo.security;
 
-import com.example.demo.dao.PermissionDao;
-import com.example.demo.dao.UserDao;
-import com.example.demo.domain.Permission;
+import com.example.demo.mapper.PermissionDao;
+import com.example.demo.mapper.UserDao;
 import com.example.demo.domain.SysRole;
 import com.example.demo.domain.SysUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

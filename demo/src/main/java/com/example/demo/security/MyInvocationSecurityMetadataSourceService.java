@@ -1,13 +1,8 @@
 package com.example.demo.security;
 
-import com.example.demo.dao.PermissionDao;
-import com.example.demo.domain.Permission;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.ConfigAttribute;
-import org.springframework.security.access.SecurityConfig;
 import org.springframework.security.web.FilterInvocation;
 import org.springframework.security.web.access.intercept.FilterInvocationSecurityMetadataSource;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,10 +11,10 @@ import java.util.*;
 @Service
 public class MyInvocationSecurityMetadataSourceService implements FilterInvocationSecurityMetadataSource {
 
-    @Autowired
+    /*@Autowired
     private PermissionDao permissionDao;
 
-    private HashMap<String, Collection<ConfigAttribute>> map = null;
+    private HashMap<String, Collection<ConfigAttribute>> map = null;*/
 
     /**
      * 加载权限表中所有权限
