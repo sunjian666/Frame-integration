@@ -11,6 +11,7 @@ public class RoleUtil {
     public static String getRole(){
         String role = null;
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
         for (GrantedAuthority list : authorities){
             role = list.toString();
