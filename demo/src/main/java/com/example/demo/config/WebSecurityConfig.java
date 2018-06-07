@@ -123,6 +123,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()
             .authorizeRequests()
+                .antMatchers("/api/kaptcha").permitAll()
                 .antMatchers("/refresh").permitAll()
                 .antMatchers("/login").permitAll()
                 .antMatchers("/logout").permitAll()

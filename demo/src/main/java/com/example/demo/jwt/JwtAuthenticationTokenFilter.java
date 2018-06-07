@@ -1,5 +1,7 @@
 package com.example.demo.jwt;
 
+import com.example.demo.exception.CheckVerifyCodeException;
+import com.example.demo.util.CodeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -50,6 +52,10 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter{
                     logger.info("JwtAuthenticationTokenFilter[doFilterInternal]  authenticated user " + useraccount + ", setting security context");
                     SecurityContextHolder.getContext().setAuthentication(authentication);
                 }
+
+                /*if (!CodeUtil.checkVerifyCode(httpServletRequest)){
+                    throw new CheckVerifyCodeException();
+                }*/
 
             }
         }

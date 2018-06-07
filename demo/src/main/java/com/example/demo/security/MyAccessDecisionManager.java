@@ -54,7 +54,8 @@ public class MyAccessDecisionManager implements AccessDecisionManager{
                     || matchers("/", request)
                     || matchers("/index.html", request)
                     || matchers("/favicon.ico", request)
-                    || matchers("/refresh", request)) {
+                    || matchers("/refresh", request)
+                    || matchers("/api/kaptcha", request)) {
                 return;
             } else {
 
