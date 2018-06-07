@@ -28,15 +28,17 @@ public class CodeUtil {
 
     /**
      * 验证码校验
-     * @param request
+     * @param
      * @return
      */
-    public static boolean checkVerifyCode(HttpServletRequest request){
+    public static boolean checkVerifyCode(String code, HttpServletRequest request){
         //获取生成的验证码
         String verifyCodeExpected = (String) request.getSession().getAttribute(Constants.KAPTCHA_SESSION_KEY);
+        String v1 = code.toUpperCase();
+        String v2 = verifyCodeExpected.toUpperCase();
         //获取用户输入的验证码
-        String verifyCodeActual = CodeUtil.getString(request, "verifyCodeActual");
-        if (verifyCodeActual == null || !verifyCodeActual.equals(verifyCodeExpected)){
+        //String verifyCodeActual = CodeUtil.getString(request, "verifyCodeActual");
+        if (v1 == null || !v1.equals(v2)){
             return false;
         }
         return true;

@@ -12,7 +12,8 @@ public enum ErrorCode {
     PERMISSION_INSERT_ERROR("8088", "资源插入错误"),
     PERMISSION_UPDATE_ERROR("8089", "资源更新错误"),
     PERMISSION_DELETE_ERROR("8090", "资源删除错误"),
-    PERMISSION_HISTORY_ERROR("8091", "历史资源查询错误");
+    PERMISSION_HISTORY_ERROR("8091", "历史资源查询错误"),
+    VERIFY_CODE_ERROR("8092", "验证码输入错误"),;
 
     private String code;
     private String message;

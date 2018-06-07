@@ -5,6 +5,7 @@ import com.example.demo.jwt.JwtAuthenticationRequest;
 import com.example.demo.jwt.JwtAuthenticationResponse;
 import com.example.demo.service.AuthService;
 import com.example.demo.exception.ErrorCode;
+import com.example.demo.util.CodeUtil;
 import com.example.demo.util.JsonResonse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,9 +25,16 @@ public class LoginController {
 
     @PostMapping(value = "/login")
     @ResponseBody
-    public JsonResonse login(@RequestBody JwtAuthenticationRequest authenticationRequest) {
+    public JsonResonse login(@RequestBody JwtAuthenticationRequest authenticationRequest, HttpServletRequest request) {
 
         JsonResonse resonse = new JsonResonse();
+
+        if (!CodeUtil.checkVerifyCode(authenticationRequest.getCode(), request)) {
+            resonse.setCode(ErrorCode.VERIFY_CODE_ERROR.getCode());
+            resonse.setSuccess(false);
+            resonse.setMessage(ErrorCode.VERIFY_CODE_ERROR.getMessage());
+            return resonse;
+        }
 
         final String token = authService.login(authenticationRequest.getUsername(), authenticationRequest.getPassword());
 
