@@ -1,5 +1,7 @@
 package com.example.demo.security;
 
+import com.example.demo.service.PermissionService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.ConfigAttribute;
 import org.springframework.security.web.FilterInvocation;
 import org.springframework.security.web.access.intercept.FilterInvocationSecurityMetadataSource;
@@ -10,6 +12,9 @@ import java.util.*;
 
 @Service
 public class MyInvocationSecurityMetadataSourceService implements FilterInvocationSecurityMetadataSource {
+
+    @Autowired
+    private PermissionService permissionService;
 
     /*@Autowired
     private PermissionDao permissionDao;
@@ -54,11 +59,15 @@ public class MyInvocationSecurityMetadataSourceService implements FilterInvocati
             }
         }
         return null;*/
+
         //此方法是为了判定用户请求的url 是否在权限表中，如果在权限表中，则返回给 decide 方法，用来判定用户是否有此权限。如果不在权限表中则放行。
         //因为我不想每一次来了请求，都先要匹配一下权限表中的信息是不是包含此url，
         // 我准备直接拦截，不管请求的url 是什么都直接拦截，然后在MyAccessDecisionManager的decide 方法中做拦截还是放行的决策。
         //所以此方法的返回值不能返回 null 此处我就随便返回一下。
+
         final HttpServletRequest request = ((FilterInvocation)object).getRequest();
+
+
         Set<ConfigAttribute> allAttributes = new HashSet<>();
         ConfigAttribute configAttribute = new MyConfigAttribute(request);
         allAttributes.add(configAttribute);

@@ -21,6 +21,17 @@ public class MyExceptionHandler implements ErrorController{
     public JsonResonse handleError(HttpServletRequest request){
 
         JsonResonse resonse = new JsonResonse();
+        Throwable throwable = (Throwable)
+                request.getAttribute("javax.servlet.error.exception");
+        String exception_type = (String)request.getAttribute("javax.servlet.error.exception_type");
+        String servlet_name = (String)request.getAttribute("javax.servlet.error.servlet_name");
+        String message = (String)request.getAttribute("javax.servlet.error.message");
+        String request_uri = (String)request.getAttribute("javax.servlet.error.request_uri");
+        System.out.println(throwable);
+        System.out.println(exception_type);
+        System.out.println(servlet_name);
+        System.out.println(message);
+        System.out.println(request_uri);
         Integer statusCode = (Integer) request.getAttribute("javax.servlet.error.status_code");
         if(statusCode == 403){
             resonse.setCode(ErrorCode.NO_ACCESS.getCode());

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.mapper.FunctionDao">
+
+    <insert id="insertPermissionFunction" parameterType="com.example.demo.domain.Function">
+        INSERT INTO sys_function(function_name) VALUES (#{name});
+    </insert>
+
+    <update id="updatePermissionFunction">
+        UPDATE sys_function SET function_name = #{name} WHERE function_id = #{id}
+    </update>
+
+    <delete id="deletePermissionFunction" parameterType="int">
+        DELETE FROM sys_function WHERE function_id = #{id}
+    </delete>
+
+    <select id="selectPermissionFunction" parameterType="int" resultMap="permissionMap">
+        SELECT * FROM sys_function a
+        INNER JOIN sys_permission b ON a.function_id = b.sys_function_id
+        <where>
+            <if test = "id != null">
+                function_id = #{id}
+            </if>
+        </where>
+    </select>
+
+    <resultMap id="permissionMap" type="com.example.demo.domain.Function">
+        <id property="id" column="function_id"/>
+        <result property="name" column="function_name"/>
+        <collection property="permissionList" ofType="com.example.demo.domain.Permission">
+            <id column="permission_id" property="id"/>
+            <result column="permission_name" property="name"/>
+            <result column="description" property="description"/>
+            <result column="res_code" property="resCode"/>
+            <result column="res_pos" property="resPos"/>
+            <result column="url" property="url"/>
+            <result column="method" property="method"/>
+        </collection>
+    </resultMap>
+
+    <select id="functionCount" parameterType="string" resultType="int">
+        SELECT count(*) FROM sys_function WHERE function_name = #{name}
+    </select>
+
+</mapper>

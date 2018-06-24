@@ -1,8 +1,6 @@
 package com.example.demo.mapper;
 
-import com.example.demo.domain.Function;
 import com.example.demo.domain.Permission;
-import com.example.demo.dto.Auths;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
@@ -11,19 +9,18 @@ import java.util.List;
 @Repository
 public interface PermissionDao {
 
-    public List<Permission> findAll();
-    public List<Permission> findByAdminUserId(int userId);
-    public List<Auths> findByAuth(String auth);
-
-    void insertPermissionFunction(Function function);
-    void updatePermissionFunction(Function function);
-    void deletePermissionFunction(@Param("id") Integer id);
-    List<Function> selectPermissionFunction(@Param("id") Integer id);
-
     void insertPermission(Permission permission);
-    void updatePermission(Permission permission);
-    void deletePermission(Integer id);
+    void updatePermission(@Param("id")Integer id, @Param("name")String name, @Param("url")String url, @Param("method")String method, @Param("lastModifiedBy")String lastModifiedBy, @Param("status")String status);
+    void deletePermission(@Param("id")Integer id, @Param("status")String status);
 
-    List<Integer> selectPermissionHistory(@Param("name") String name);
+    Integer checkResExists(@Param("url") String url, @Param("method") String method, @Param("status")String status);
+    Permission selectPermissionOfCodePos(@Param("url") String url, @Param("method") String method, @Param("status")String status);
+    Integer selectSystemMaxPos(@Param("status")String status);
+    Integer selectSystemMaxCode(@Param("maxPos") Integer maxPos, @Param("status")String status);
+
+    List<Integer> selectUserIdOfPermission(@Param("permissionId") Integer permissionId, @Param("status")String status);
+
+    List<Permission> selectPermission(@Param("status")String status);
+    Permission selectPermissionOfOne(@Param("permissionId") Integer permissionId, @Param("status")String status);
 
 }

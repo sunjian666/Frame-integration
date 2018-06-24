@@ -5,21 +5,95 @@
         <id property="id" column="user_id"/>
         <result property="username" column="username"/>
         <result property="password" column="PASSWORD"/>
+        <result property="codeArr" column="code_arr"/>
+        <result property="name" column="name"/>
+        <result property="email" column="email"/>
+        <result property="phone" column="phone"/>
+        <result property="status" column="status"/>
+        <result property="createdBy" column="created_by"/>
+        <result property="createdDate" column="created_date"/>
+        <result property="lastModifiedBy" column="last_modified_by"/>
+        <result property="lastModifiedDate" column="last_modified_date"/>
         <collection property="roles" ofType="com.example.demo.domain.SysRole">
-            <result column="role_name" property="name"/>
+            <id property="id" column="role_id"/>
+            <result property="name" column="role_name"/>
+            <result property="description" column="description"/>
+            <collection property="permissionList" ofType="com.example.demo.domain.Permission">
+                <id property="id" column="permission_id"/>
+                <result property="name" column="permission_name"/>
+                <result property="description" column="description"/>
+                <result property="url" column="url"/>
+                <result property="method" column="method"/>
+                <result property="resCode" column="res_code"/>
+                <result property="resPos" column="res_pos"/>
+            </collection>
         </collection>
 
     </resultMap>
     <select id="findByUserName" parameterType="String" resultMap="userMap">
         select u.*
-        ,r.role_name
+        ,r.*
         from Sys_User u
         LEFT JOIN sys_role_user sru on u.user_id= sru.Sys_User_id
         LEFT JOIN Sys_Role r on sru.Sys_Role_id=r.role_id
-        where username= #{username}
+        where u.username= #{username} AND u.status = #{status} AND r.status = #{status}
     </select>
 
-    <select id="getById" parameterType="int" resultMap="userMap">
-        SELECT * FROM Sys_User WHERE id =#{user_id}
+    <select id="selectUserOne" resultMap="userMap">
+        select u.*
+        ,r.*
+        from Sys_User u
+        LEFT JOIN sys_role_user sru on u.user_id= sru.Sys_User_id
+        LEFT JOIN Sys_Role r on sru.Sys_Role_id=r.role_id
+        LEFT JOIN sys_permission_role b on r.role_id = b.sys_role_id
+        LEFT JOIN sys_permission c ON b.sys_permission_id = c.permission_id
+        where u.user_id = #{id} AND u.status = #{status} AND r.status = #{status} AND c.status = #{status}
     </select>
+
+    <select id="selectUserAll" resultMap="userMap">
+        select u.*
+        ,r.*
+        from Sys_User u
+        LEFT JOIN sys_role_user sru on u.user_id= sru.Sys_User_id
+        LEFT JOIN Sys_Role r on sru.Sys_Role_id=r.role_id
+        LEFT JOIN sys_permission_role b on r.role_id = b.sys_role_id
+        LEFT JOIN sys_permission c ON b.sys_permission_id = c.permission_id
+        WHERE u.status = #{status} AND r.status = #{status} AND c.status = #{status}
+    </select>
+
+    <select id="selectCodeArr" parameterType="string" resultType="string">
+        SELECT code_arr FROM sys_user WHERE username = #{userName}
+    </select>
+
+    <insert id="insertUser" parameterType="com.example.demo.domain.SysUser">
+        INSERT INTO sys_user(username, password, name, email, phone, status, created_by, created_date, last_modified_by, last_modified_date) VALUES (#{username}, #{password}, #{name}, #{email}, #{phone}, #{status}, #{createdBy}, DATE_FORMAT(CURRENT_TIMESTAMP, '%Y-%m-%d %H:%i:%s'), #{lastModifiedBy}, DATE_FORMAT(CURRENT_TIMESTAMP, '%Y-%m-%d %H:%i:%s'))
+    </insert>
+
+    <select id="countUser" parameterType="string" resultType="int">
+        SELECT count(*) FROM sys_user WHERE username = #{username}
+    </select>
+
+    <update id="updateUser">
+        UPDATE sys_user SET  password = #{password}, name = #{name}, email = #{email}, phone = #{phone},
+         last_modified_by = #{lastModifiedBy}, last_modified_date = DATE_FORMAT(CURRENT_TIMESTAMP, '%Y-%m-%d %H:%i:%s') WHERE user_id = #{id} AND status = #{status}
+    </update>
+
+    <update id="deleteUser">
+        UPDATE sys_user SET status = #{status} WHERE user_id = #{id}
+    </update>
+    
+    <delete id="deleteOldRelationship" parameterType="int">
+        DELETE FROM sys_role_user WHERE sys_user_id = #{userId}
+    </delete>
+    
+    <insert id="saveNewRelationshipOfUser">
+        INSERT INTO sys_role_user(sys_user_id, sys_role_id) VALUES
+        <foreach collection="roleIdList" item="item" index="index" separator=",">
+             (#{userId}, #{item})
+        </foreach>
+    </insert>
+
+    <update id="updateCodeArr">
+        UPDATE sys_user SET code_arr = #{codeArr} WHERE user_id = #{userId} AND status = #{status}
+    </update>
 </mapper>

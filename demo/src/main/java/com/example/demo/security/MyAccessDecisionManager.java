@@ -1,21 +1,25 @@
 package com.example.demo.security;
 
+import com.example.demo.domain.Permission;
 import com.example.demo.mapper.PermissionDao;
-import com.example.demo.dto.Auths;
+import com.example.demo.mapper.UserDao;
+import com.example.demo.service.PermissionService;
+import com.example.demo.util.ResourceUtil;
+import com.example.demo.util.RoleUtil;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDecisionManager;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.ConfigAttribute;
 import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Collection;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 //接口决策器
 @Service
@@ -23,6 +27,12 @@ public class MyAccessDecisionManager implements AccessDecisionManager{
 
     @Autowired
     private PermissionDao permissionDao;
+
+    @Autowired
+    private UserDao userDao;
+
+    @Autowired
+    private PermissionService permissionService;
 
 
     // decide 方法是判定是否拥有权限的决策方法
@@ -43,10 +53,8 @@ public class MyAccessDecisionManager implements AccessDecisionManager{
 
             String url, method;
             AntPathRequestMatcher matcher;
-            System.out.println(authentication.getPrincipal());
-            System.out.println(authentication.getDetails());
-            System.out.println(authentication.getCredentials());
             if ("anonymousUser".equals(authentication.getPrincipal())
+                    || "ROLE_SUPER".equals(RoleUtil.getRole())
                     || matchers("/images/**", request)
                     || matchers("/js/**", request)
                     || matchers("/css/**", request)
@@ -54,8 +62,7 @@ public class MyAccessDecisionManager implements AccessDecisionManager{
                     || matchers("/", request)
                     || matchers("/index.html", request)
                     || matchers("/favicon.ico", request)
-                    || matchers("/refresh", request)
-                    || matchers("/api/kaptcha", request)) {
+                    || matchers("/refresh", request)) {
                 return;
             } else {
 
@@ -78,7 +85,41 @@ public class MyAccessDecisionManager implements AccessDecisionManager{
                             }
                         }
                     }*/
-                for (GrantedAuthority ga : authentication.getAuthorities()) {
+
+                url = request.getServletPath();
+                method = request.getMethod();
+
+                Integer resCode;
+                Integer resPos;
+
+                Boolean resAlreadyExists = permissionService.checkResExists(url, method);
+
+                if (resAlreadyExists){
+                    Permission permission = permissionService.selectPermissionOfCodePos(url, method);
+                    resCode = permission.getResCode();
+                    resPos = permission.getResPos();
+
+                    String userName = RoleUtil.getUserName();
+                    String codeArr = userDao.selectCodeArr(userName);
+
+                    if(StringUtils.isEmpty(codeArr)){
+                        throw new AccessDeniedException("no right");
+                    }
+
+                    boolean b = ResourceUtil.checkAuthority(codeArr, resCode, resPos);
+                    if (b){
+                        return;
+                    }else{
+                        throw new AccessDeniedException("no right");
+                    }
+                }else{
+                    Permission permissionCode = permissionService.createPermissionCode(url, method);
+                    permissionService.insertPermission(permissionCode);
+
+                    throw new AccessDeniedException("no right");
+                }
+
+                /*for (GrantedAuthority ga : authentication.getAuthorities()) {
                     if (ga instanceof SimpleGrantedAuthority) {
                         SimpleGrantedAuthority simpleGrantedAuthority = (SimpleGrantedAuthority)ga;
                         String authority = simpleGrantedAuthority.getAuthority();
@@ -100,11 +141,10 @@ public class MyAccessDecisionManager implements AccessDecisionManager{
                             return;
                         }
                     }
-                }
+                }*/
 
                 }
             }
-            throw new AccessDeniedException("no right");
     }
 
     @Override

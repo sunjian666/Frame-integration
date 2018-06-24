@@ -4,6 +4,7 @@ import com.example.demo.mapper.PermissionDao;
 import com.example.demo.mapper.UserDao;
 import com.example.demo.domain.SysRole;
 import com.example.demo.domain.SysUser;
+import com.example.demo.util.ConstantUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -26,7 +27,7 @@ public class CustomUserService implements UserDetailsService{  //自定义UserDe
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {  //重写loadUserByUsername 方法获得 userdetails 类型用户
 
-        SysUser user = userDao.findByUserName(username);
+        SysUser user = userDao.findByUserName(username, ConstantUtil.USE);
         if(user != null){
             /*List<Permission> permissions = permissionDao.findByAdminUserId(user.getId());
             List<GrantedAuthority> grantedAuthorities = new ArrayList<>();

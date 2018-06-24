@@ -12,8 +12,22 @@ public enum ErrorCode {
     PERMISSION_INSERT_ERROR("8088", "资源插入错误"),
     PERMISSION_UPDATE_ERROR("8089", "资源更新错误"),
     PERMISSION_DELETE_ERROR("8090", "资源删除错误"),
-    PERMISSION_HISTORY_ERROR("8091", "历史资源查询错误"),
-    VERIFY_CODE_ERROR("8092", "验证码输入错误"),;
+    PERMISSION_SELECT_ERROR("8091", "资源查询错误"),
+    VERIFY_CODE_ERROR("8092", "验证码输入错误"),
+    VERIFY_CODE_NULL_ERROR("8093", "验证码不能为空"),
+    ROLE_INSERT_ERROR("8094", "权限插入错误"),
+    ROLE_UPDATE_ERROR("8095", "权限更新错误"),
+    ROLE_DELETE_ERROR("8096", "权限删除错误"),
+    ROLE_SELECT_ERROR("8097", "权限查询错误"),
+    USER_ALREADY_EXIST("8098", "用户已存在"),
+    ROLE_ALREADY_EXIST("8099", "权限已存在"),
+    PERMISSION_ALREADY_EXIST("8100", "资源已存在"),
+    FUNCTION_ALREADY_EXIST("8101", "功能已存在"),
+    USER_INSERT_ERROR("8102", "注册用户失败"),
+    USER_UPDATE_ERROR("8103","更新用户失败"),
+    USER_DELETE_ERROR("8104","删除用户失败"),
+    USER_SELECT_ERROR("8104","查询用户失败"),
+    MODIFITY_USER_ROLE_ERROR("8105","修改用户权限错误");
 
     private String code;
     private String message;

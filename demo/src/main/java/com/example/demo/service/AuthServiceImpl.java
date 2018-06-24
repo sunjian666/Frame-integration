@@ -40,7 +40,9 @@ public class AuthServiceImpl implements AuthService{
         Authentication authentication = this.authenticationManager.authenticate(authenticationToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        final UserDetails userDetails = userDetailsService.loadUserByUsername(userName);
+        UserDetails userDetails = (UserDetails)authentication.getPrincipal();
+
+        //final UserDetails userDetails = userDetailsService.loadUserByUsername(userName);
 
         final String token = jwtUtil.generateToken(userDetails);
 

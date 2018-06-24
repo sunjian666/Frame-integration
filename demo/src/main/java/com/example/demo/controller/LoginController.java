@@ -7,6 +7,7 @@ import com.example.demo.service.AuthService;
 import com.example.demo.exception.ErrorCode;
 import com.example.demo.util.CodeUtil;
 import com.example.demo.util.JsonResonse;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
@@ -29,7 +30,16 @@ public class LoginController {
 
         JsonResonse resonse = new JsonResonse();
 
-        if (!CodeUtil.checkVerifyCode(authenticationRequest.getCode(), request)) {
+        String code = authenticationRequest.getCode();
+
+        if(StringUtils.isEmpty(code)){
+            resonse.setCode(ErrorCode.VERIFY_CODE_NULL_ERROR.getCode());
+            resonse.setSuccess(false);
+            resonse.setMessage(ErrorCode.VERIFY_CODE_NULL_ERROR.getMessage());
+            return resonse;
+        }
+
+        if (!CodeUtil.checkVerifyCode(code, request)) {
             resonse.setCode(ErrorCode.VERIFY_CODE_ERROR.getCode());
             resonse.setSuccess(false);
             resonse.setMessage(ErrorCode.VERIFY_CODE_ERROR.getMessage());

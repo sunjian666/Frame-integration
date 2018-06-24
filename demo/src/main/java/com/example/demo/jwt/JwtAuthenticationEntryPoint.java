@@ -2,9 +2,8 @@ package com.example.demo.jwt;
 
 
 import com.alibaba.fastjson.JSONObject;
-import com.example.demo.exception.CheckVerifyCodeException;
 import com.example.demo.exception.ErrorCode;
-import com.example.demo.util.JsonResonse;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
@@ -31,7 +30,7 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint, Se
             header.put("code", ErrorCode.USERNAME_AND_PASSWORD_ERROR.getCode());
             header.put("success", "false");
             header.put("message", ErrorCode.USERNAME_AND_PASSWORD_ERROR.getMessage());
-        } else{
+        }else{
             header.put("code", ErrorCode.TOKEN_INVALID.getCode());
             header.put("success", "false");
             header.put("message", ErrorCode.TOKEN_INVALID.getMessage());

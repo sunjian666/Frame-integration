@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.mapper.RoleDao">
+    
+    <select id="selectRoleDeeply" parameterType="java.util.List" resultMap="roleMap">
+      SELECT *
+      FROM sys_role a
+      INNER JOIN sys_permission_role b ON a.role_id = b.sys_role_id
+      INNER JOIN sys_permission c ON b.sys_permission_id = c.permission_id
+      WHERE a.status = #{status} AND c.status = #{status}
+    </select>
+
+    <select id="selectRoleDeeplyOfId" parameterType="java.util.List" resultMap="roleMap">
+        SELECT *
+        FROM sys_role a
+        INNER JOIN sys_permission_role b ON a.role_id = b.sys_role_id
+        INNER JOIN sys_permission c ON b.sys_permission_id = c.permission_id
+        WHERE a.status = #{status} AND c.status = #{status} AND a.role_id in
+        <foreach collection="roleIdList" item="item" index="index" open="(" close=")"
+                 separator=",">
+            #{item}
+        </foreach>
+    </select>
+
+    <select id="selectRoleDeeplyOfOne" parameterType="int" resultMap="roleMap">
+        SELECT *
+        FROM sys_role a
+        INNER JOIN sys_permission_role b ON a.role_id = b.sys_role_id
+        INNER JOIN sys_permission c ON b.sys_permission_id = c.permission_id
+        WHERE a.role_id = #{id} AND a.status = #{status} AND c.status = #{status}
+    </select>
+
+    <resultMap id="roleMap" type="com.example.demo.domain.SysRole">
+        <id property="id" column="role_id"/>
+        <result property="name" column="role_name"/>
+        <result property="description" column="description"/>
+        <result property="status" column="status"/>
+        <collection property="permissionList" ofType="com.example.demo.domain.Permission">
+            <result property="id" column="permission_id"/>
+            <result property="name" column="permission_name"/>
+            <result property="description" column="description"/>
+            <result property="url" column="url"/>
+            <result property="method" column="method"/>
+            <result property="resCode" column="res_code"/>
+            <result property="resPos" column="res_pos"/>
+        </collection>
+    </resultMap>
+
+    <insert id="insertRole" parameterType="com.example.demo.domain.SysRole">
+        INSERT INTO sys_role(role_name, description, status, created_by, created_date, last_modified_by, last_modified_date) VALUES (#{name}, #{description}, #{status}, #{createdBy}, DATE_FORMAT(CURRENT_TIMESTAMP, '%Y-%m-%d %H:%i:%s'), #{lastModifiedBy}, DATE_FORMAT(CURRENT_TIMESTAMP, '%Y-%m-%d %H:%i:%s'));
+    </insert>
+
+    <update id="updateRole">
+        UPDATE sys_role SET role_name = #{name}, description = #{description}, last_modified_by = #{lastModifiedBy}, last_modified_date = DATE_FORMAT(CURRENT_TIMESTAMP, '%Y-%m-%d %H:%i:%s') WHERE role_id = #{id} AND status = #{status}
+    </update>
+
+    <update id="deleteRole">
+        UPDATE sys_role SET status = #{status} WHERE role_id = #{id}
+    </update>
+
+    <select id="roleCount" parameterType="string" resultType="int">
+        SELECT count(*) FROM sys_role WHERE role_name = #{name}
+    </select>
+    
+    <delete id="deleteOldRelationship" parameterType="java.lang.Integer">
+        DELETE FROM sys_permission_role WHERE sys_role_id = #{roleId}
+    </delete>
+
+    <delete id="deleteOldRelationshipOfPermission" parameterType="java.lang.Integer">
+        DELETE FROM sys_permission_role WHERE sys_permission_id = #{permissionId}
+    </delete>
+
+    <delete id="deleteOldRelationshipOfRole" parameterType="java.lang.Integer">
+        DELETE FROM sys_role_user WHERE sys_role_id = #{roleId}
+    </delete>
+
+    <insert id="saveNewRelationship">
+            INSERT INTO sys_permission_role(sys_role_id, sys_permission_id) VALUES
+        <foreach collection="permissionIdList" item="permissionId" index="index" separator=",">
+            (#{roleId}, #{permissionId})
+        </foreach>
+    </insert>
+
+    <select id="selectUserIdOfRoleId" parameterType="java.lang.Integer" resultType="java.util.List">
+        SELECT sys_user_id FROM sys_role_user WHERE sys_role_id = #{roleId} GROUP BY sys_user_id
+    </select>
+    
+</mapper>
