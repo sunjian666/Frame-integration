@@ -37,6 +37,17 @@
         LEFT JOIN sys_role_user sru on u.user_id= sru.Sys_User_id
         LEFT JOIN Sys_Role r on sru.Sys_Role_id=r.role_id
         where u.username= #{username} AND u.status = #{status} AND r.status = #{status}
+        GROUP BY u.username
+    </select>
+
+    <select id="findByMobile" parameterType="String" resultMap="userMap">
+        select u.*
+        ,r.*
+        from Sys_User u
+        LEFT JOIN sys_role_user sru on u.user_id= sru.Sys_User_id
+        LEFT JOIN Sys_Role r on sru.Sys_Role_id=r.role_id
+        where u.phone= #{phone} AND u.status = #{status} AND r.status = #{status}
+        GROUP BY u.username
     </select>
 
     <select id="selectUserOne" resultMap="userMap">
@@ -48,6 +59,7 @@
         LEFT JOIN sys_permission_role b on r.role_id = b.sys_role_id
         LEFT JOIN sys_permission c ON b.sys_permission_id = c.permission_id
         where u.user_id = #{id} AND u.status = #{status} AND r.status = #{status} AND c.status = #{status}
+        GROUP BY u.username
     </select>
 
     <select id="selectUserAll" resultMap="userMap">
@@ -59,6 +71,7 @@
         LEFT JOIN sys_permission_role b on r.role_id = b.sys_role_id
         LEFT JOIN sys_permission c ON b.sys_permission_id = c.permission_id
         WHERE u.status = #{status} AND r.status = #{status} AND c.status = #{status}
+        GROUP BY u.username
     </select>
 
     <select id="selectCodeArr" parameterType="string" resultType="string">

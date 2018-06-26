@@ -6,6 +6,7 @@ import com.example.demo.exception.ErrorCode;
 import com.example.demo.service.RoleService;
 import com.example.demo.util.JsonResonse;
 import com.github.pagehelper.PageInfo;
+import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,7 +20,7 @@ public class RoleController {
     private RoleService roleService;
 
     @PostMapping("/role")
-    public JsonResonse insertRole(@RequestBody SysRole role){
+    public JsonResonse insertRole(@RequestBody SysRole role, HttpServletRequest request){
         JsonResonse resonse = new JsonResonse();
         String name = role.getName();
 
@@ -31,7 +32,7 @@ public class RoleController {
                 return resonse;
             }
 
-            roleService.insertRole(role);
+            roleService.insertRole(role, request);
         }catch (Exception e){
             resonse.setCode(ErrorCode.ROLE_INSERT_ERROR.getCode());
             resonse.setSuccess(false);
@@ -41,10 +42,10 @@ public class RoleController {
     }
 
     @PutMapping("/role")
-    public JsonResonse updateRole(@RequestBody SysRole role){
+    public JsonResonse updateRole(@RequestBody SysRole role, HttpServletRequest request){
         JsonResonse resonse = new JsonResonse();
         try{
-            roleService.updateRole(role);
+            roleService.updateRole(role, request);
         }catch (Exception e){
             resonse.setCode(ErrorCode.ROLE_UPDATE_ERROR.getCode());
             resonse.setSuccess(false);

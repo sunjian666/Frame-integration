@@ -1,3 +1,4 @@
+/*
 package com.example.demo.jwt;
 
 import java.io.Serializable;
@@ -17,3 +18,4 @@ public class JwtAuthenticationResponse implements Serializable {
     }
 
 }
+*/

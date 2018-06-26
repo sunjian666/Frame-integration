@@ -1,5 +1,6 @@
-package com.example.demo.security;
+package com.example.demo.security.process;
 
+import com.example.demo.security.process.MyConfigAttribute;
 import com.example.demo.service.PermissionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.ConfigAttribute;

@@ -1,3 +1,4 @@
+/*
 package com.example.demo.jwt;
 
 import java.io.Serializable;
@@ -44,3 +45,4 @@ public class JwtAuthenticationRequest implements Serializable {
         this.code = code;
     }
 }
+*/

@@ -10,6 +10,7 @@ import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController
@@ -20,7 +21,7 @@ public class PermissionController {
     private PermissionService permissionService;
 
     @PostMapping("/permission")
-    public JsonResonse insertPermission(@RequestBody Permission permission){
+    public JsonResonse insertPermission(@RequestBody Permission permission, HttpServletRequest request){
         JsonResonse resonse = new JsonResonse();
 
         String url = permission.getUrl();
@@ -39,7 +40,7 @@ public class PermissionController {
             permissionCode.setDescription(permission.getDescription());
             permissionCode.setFunctionId(permission.getFunctionId());
 
-            permissionService.insertPermission(permission);
+            permissionService.insertPermission(permission, request);
         }catch (Exception e){
             resonse.setCode(ErrorCode.PERMISSION_INSERT_ERROR.getCode());
             resonse.setSuccess(false);
@@ -49,10 +50,10 @@ public class PermissionController {
     }
 
     @PutMapping("/permission")
-    public JsonResonse updatePermission(@RequestBody Permission permission){
+    public JsonResonse updatePermission(@RequestBody Permission permission, HttpServletRequest request){
         JsonResonse resonse = new JsonResonse();
         try{
-            permissionService.updatePermission(permission);
+            permissionService.updatePermission(permission, request);
         }catch (Exception e){
             resonse.setCode(ErrorCode.PERMISSION_UPDATE_ERROR.getCode());
             resonse.setSuccess(false);

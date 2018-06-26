@@ -1,8 +1,9 @@
 package com.example.demo.domain;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class SysRole extends AbstractAuditingEntity{
+public class SysRole extends AbstractAuditingEntity implements Serializable{
 
     private Integer id;
     private String name;

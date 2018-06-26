@@ -11,6 +11,8 @@ public interface  UserDao {
 
     SysUser findByUserName(@Param("username")String username, @Param("status") String status);
 
+    SysUser findByMobile(@Param("phone")String phone, @Param("status") String status);
+
     String selectCodeArr(String userName);
 
     void insertUser(SysUser user);

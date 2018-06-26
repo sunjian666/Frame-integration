@@ -30,7 +30,7 @@
         SELECT max(res_pos) FROM sys_permission WHERE status = #{status}
     </select>
 
-    <select id="selectSystemMaxCode" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+    <select id="selectSystemMaxCode" resultType="java.lang.Integer">
         SELECT max(res_code) FROM sys_permission WHERE res_pos=#{maxPos} AND status = #{status}
     </select>
 

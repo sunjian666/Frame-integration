@@ -7,6 +7,7 @@ import com.example.demo.service.UserService;
 import com.example.demo.util.JsonResonse;
 import com.example.demo.util.MD5Util;
 import com.github.pagehelper.PageInfo;
+import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,7 +21,7 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/user")
-    public JsonResonse insertUser(@RequestBody SysUser user){
+    public JsonResonse insertUser(@RequestBody SysUser user, HttpServletRequest request){
         JsonResonse resonse = new JsonResonse();
         String username = user.getUsername();
 
@@ -32,7 +33,7 @@ public class UserController {
                 return resonse;
             }
 
-            userService.insertUser(user);
+            userService.insertUser(user, request);
         }catch (Exception e){
             resonse.setCode(ErrorCode.USER_INSERT_ERROR.getCode());
             resonse.setSuccess(false);
@@ -42,7 +43,7 @@ public class UserController {
     }
 
     @PutMapping("/user")
-    public JsonResonse updateUser(@RequestBody SysUser user){
+    public JsonResonse updateUser(@RequestBody SysUser user, HttpServletRequest request){
         JsonResonse resonse = new JsonResonse();
         String password = user.getPassword();
         Integer id = user.getId();
@@ -54,7 +55,7 @@ public class UserController {
                 user.setPassword(MD5Util.encode(password));
             }
 
-            userService.updateUser(user);
+            userService.updateUser(user,request);
         }catch (Exception e){
             resonse.setCode(ErrorCode.USER_UPDATE_ERROR.getCode());
             resonse.setSuccess(false);

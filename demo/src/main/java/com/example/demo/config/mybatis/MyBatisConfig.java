@@ -1,4 +1,4 @@
-package com.example.demo.config;
+package com.example.demo.config.mybatis;
 
 import org.apache.ibatis.logging.log4j.Log4jImpl;
 import org.apache.ibatis.type.JdbcType;

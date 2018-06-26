@@ -1,3 +1,4 @@
+/*
 package com.example.demo.jwt;
 
 import com.example.demo.exception.CheckVerifyCodeException;
@@ -53,12 +54,15 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter{
                     SecurityContextHolder.getContext().setAuthentication(authentication);
                 }
 
-                /*if (!CodeUtil.checkVerifyCode(httpServletRequest)){
+                */
+/*if (!CodeUtil.checkVerifyCode(httpServletRequest)){
                     throw new CheckVerifyCodeException();
-                }*/
+                }*//*
+
 
             }
         }
         filterChain.doFilter(httpServletRequest, httpServletResponse);
     }
 }
+*/

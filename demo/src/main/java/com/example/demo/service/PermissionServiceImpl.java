@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import com.example.demo.domain.SysRole;
+import com.example.demo.jwt.JwtUtil;
 import com.example.demo.mapper.FunctionDao;
 import com.example.demo.mapper.PermissionDao;
 import com.example.demo.domain.Function;
@@ -13,9 +14,11 @@ import com.example.demo.util.ResourceUtil;
 import com.example.demo.util.RoleUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @Service
@@ -33,10 +36,21 @@ public class PermissionServiceImpl implements PermissionService {
     @Autowired
     private RoleDao roleDao;
 
-    @Override
-    public void insertPermission(Permission permission) {
+    @Autowired
+    private JwtUtil jwtUtil;
 
-        String name = userDao.findByUserName(RoleUtil.getUserName(), ConstantUtil.USE).getName();
+    @Override
+    public void insertPermission(Permission permission, HttpServletRequest request) {
+
+        /*String userName = RoleUtil.getUserName();
+        if (StringUtils.isNotEmpty(userName)){
+            String name = userDao.findByUserName(RoleUtil.getUserName(), ConstantUtil.USE).getName();
+
+            permission.setCreatedBy(name);
+            permission.setLastModifiedBy(name);
+        }*/
+
+        String name = jwtUtil.getNameFromToken(request);
 
         permission.setCreatedBy(name);
         permission.setLastModifiedBy(name);
@@ -45,9 +59,10 @@ public class PermissionServiceImpl implements PermissionService {
     }
 
     @Override
-    public void updatePermission(Permission permission) {
+    public void updatePermission(Permission permission, HttpServletRequest request) {
 
-        String name = userDao.findByUserName(RoleUtil.getUserName(), ConstantUtil.USE).getName();
+        //String name = userDao.findByUserName(RoleUtil.getUserName(), ConstantUtil.USE).getName();
+        String name = jwtUtil.getNameFromToken(request);
         permission.setLastModifiedBy(name);
         permissionDao.updatePermission(permission.getId(), permission.getName(), permission.getUrl(), permission.getMethod(), permission.getLastModifiedBy(), permission.getStatus());
     }

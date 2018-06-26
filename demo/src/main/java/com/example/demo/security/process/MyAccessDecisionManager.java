@@ -1,6 +1,7 @@
-package com.example.demo.security;
+package com.example.demo.security.process;
 
 import com.example.demo.domain.Permission;
+import com.example.demo.jwt.JwtUtil;
 import com.example.demo.mapper.PermissionDao;
 import com.example.demo.mapper.UserDao;
 import com.example.demo.service.PermissionService;
@@ -18,8 +19,6 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 
 //接口决策器
 @Service
@@ -33,6 +32,9 @@ public class MyAccessDecisionManager implements AccessDecisionManager{
 
     @Autowired
     private PermissionService permissionService;
+
+    @Autowired
+    private JwtUtil jwtUtil;
 
 
     // decide 方法是判定是否拥有权限的决策方法
@@ -62,7 +64,9 @@ public class MyAccessDecisionManager implements AccessDecisionManager{
                     || matchers("/", request)
                     || matchers("/index.html", request)
                     || matchers("/favicon.ico", request)
-                    || matchers("/refresh", request)) {
+                    || matchers("/refresh", request)
+                    || matchers("/oauth/token", request)
+                    || matchers("/code/*", request)) {
                 return;
             } else {
 
@@ -99,7 +103,8 @@ public class MyAccessDecisionManager implements AccessDecisionManager{
                     resCode = permission.getResCode();
                     resPos = permission.getResPos();
 
-                    String userName = RoleUtil.getUserName();
+                    String userName = jwtUtil.getUserAccountFromToken(request);
+                    //String userName = RoleUtil.getUserName();
                     String codeArr = userDao.selectCodeArr(userName);
 
                     if(StringUtils.isEmpty(codeArr)){
@@ -114,7 +119,7 @@ public class MyAccessDecisionManager implements AccessDecisionManager{
                     }
                 }else{
                     Permission permissionCode = permissionService.createPermissionCode(url, method);
-                    permissionService.insertPermission(permissionCode);
+                    permissionService.insertPermission(permissionCode, request);
 
                     throw new AccessDeniedException("no right");
                 }

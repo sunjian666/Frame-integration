@@ -1,14 +1,23 @@
 package com.example.demo.controller;
 
 import com.example.demo.domain.Msg;
+import com.example.demo.jwt.JwtUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 @RestController
 public class HomeController {
+
+    @Autowired
+    private JwtUtil jwtUtil;
 
 @RequestMapping("/")
     public String index(Model model){
@@ -38,8 +47,22 @@ public class HomeController {
 
     @RequestMapping(value = "/user", method = RequestMethod.POST)
     @ResponseBody
-    public String save(){
-        return "hello save";
+    public Map<String, Object> save(HttpServletRequest request){
+
+        String userAccount = jwtUtil.getUserAccountFromToken(request);
+        List<String> authorities = jwtUtil.getAuthoritiesFromToken(request);
+        String email = jwtUtil.getEmailFromToken(request);
+        String name = jwtUtil.getNameFromToken(request);
+        String phone = jwtUtil.getPhoneFromToken(request);
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("userAccount", userAccount);
+        map.put("authorities", authorities);
+        map.put("email", email);
+        map.put("name", name);
+        map.put("phone", phone);
+
+        return map;
     }
 
 

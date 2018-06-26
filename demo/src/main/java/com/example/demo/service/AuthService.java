@@ -1,3 +1,4 @@
+/*
 package com.example.demo.service;
 
 import com.example.demo.domain.SysUser;
@@ -9,3 +10,4 @@ public interface  AuthService {
     String refresh(String oldToken);
 
 }
+*/

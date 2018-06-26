@@ -1,3 +1,4 @@
+/*
 package com.example.demo.service;
 
 import com.example.demo.domain.SysUser;
@@ -62,3 +63,4 @@ public class AuthServiceImpl implements AuthService{
         return null;
     }
 }
+*/

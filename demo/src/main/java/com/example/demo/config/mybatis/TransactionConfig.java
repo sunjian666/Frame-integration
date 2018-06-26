@@ -1,4 +1,4 @@
-package com.example.demo.config;
+package com.example.demo.config.mybatis;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;

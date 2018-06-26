@@ -1,10 +1,11 @@
-package com.example.demo.security;
+package com.example.demo.security.service;
 
 import com.example.demo.mapper.PermissionDao;
 import com.example.demo.mapper.UserDao;
 import com.example.demo.domain.SysRole;
 import com.example.demo.domain.SysUser;
 import com.example.demo.util.ConstantUtil;
+import com.example.demo.util.ValidateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -15,8 +16,10 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-@Service
+
 public class CustomUserService implements UserDetailsService{  //自定义UserDetailsService 接口
 
     @Autowired
@@ -27,7 +30,13 @@ public class CustomUserService implements UserDetailsService{  //自定义UserDe
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {  //重写loadUserByUsername 方法获得 userdetails 类型用户
 
-        SysUser user = userDao.findByUserName(username, ConstantUtil.USE);
+        SysUser user;
+        if(ValidateUtil.checkCellphone(username) || ValidateUtil.checkTelephone(username)){
+            user = userDao.findByMobile(username, ConstantUtil.USE);
+        }else{
+            user = userDao.findByUserName(username, ConstantUtil.USE);
+        }
+
         if(user != null){
             /*List<Permission> permissions = permissionDao.findByAdminUserId(user.getId());
             List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
@@ -52,4 +61,6 @@ public class CustomUserService implements UserDetailsService{  //自定义UserDe
             throw new UsernameNotFoundException("admin: " + username + " do not exist!");
         }
     }
+
+
 }

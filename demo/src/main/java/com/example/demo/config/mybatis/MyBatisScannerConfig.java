@@ -1,4 +1,4 @@
-package com.example.demo.config;
+package com.example.demo.config.mybatis;
 
 import org.mybatis.spring.mapper.MapperScannerConfigurer;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;

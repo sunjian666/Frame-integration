@@ -1,4 +1,4 @@
-package com.example.demo.security;
+package com.example.demo.security.process;
 
 import org.springframework.security.access.ConfigAttribute;
 

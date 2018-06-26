@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import com.example.demo.domain.SysRole;
+import com.example.demo.jwt.JwtUtil;
 import com.example.demo.mapper.PermissionDao;
 import com.example.demo.mapper.RoleDao;
 import com.example.demo.mapper.UserDao;
@@ -9,6 +10,7 @@ import com.example.demo.util.ResourceUtil;
 import com.example.demo.util.RoleUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +28,9 @@ public class RoleServiceImpl implements RoleService{
     @Autowired
     private PermissionDao permissionDao;
 
+    @Autowired
+    private JwtUtil jwtUtil;
+
     @Override
     public PageInfo<SysRole> selectRoleDeeply(Integer pageNum, Integer pageSize) {
         PageHelper.startPage(pageNum, pageSize);
@@ -40,11 +45,12 @@ public class RoleServiceImpl implements RoleService{
     }
 
     @Override
-    public void insertRole(SysRole sysRole) {
+    public void insertRole(SysRole sysRole, HttpServletRequest request) {
         sysRole.setName("ROLE_" + sysRole.getName());
         sysRole.setStatus(ConstantUtil.USE);
 
-        String name = userDao.findByUserName(RoleUtil.getUserName(), ConstantUtil.USE).getName();
+        //String name = userDao.findByUserName(RoleUtil.getUserName(), ConstantUtil.USE).getName();
+        String name = jwtUtil.getNameFromToken(request);
 
         sysRole.setCreatedBy(name);
         sysRole.setLastModifiedBy(name);
@@ -53,9 +59,10 @@ public class RoleServiceImpl implements RoleService{
     }
 
     @Override
-    public void updateRole(SysRole sysRole) {
+    public void updateRole(SysRole sysRole, HttpServletRequest request) {
 
-        String name = userDao.findByUserName(RoleUtil.getUserName(), ConstantUtil.USE).getName();
+        //String name = userDao.findByUserName(RoleUtil.getUserName(), ConstantUtil.USE).getName();
+        String name = jwtUtil.getNameFromToken(request);
         sysRole.setLastModifiedBy(name);
 
         roleDao.updateRole(sysRole.getId(),sysRole.getName(),sysRole.getDescription(),sysRole.getLastModifiedBy(),sysRole.getStatus());

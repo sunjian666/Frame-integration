@@ -3,12 +3,14 @@ package com.example.demo.service;
 import com.example.demo.domain.Function;
 import com.example.demo.domain.SysRole;
 import com.example.demo.domain.SysUser;
+import com.example.demo.jwt.JwtUtil;
 import com.example.demo.mapper.PermissionDao;
 import com.example.demo.mapper.RoleDao;
 import com.example.demo.mapper.UserDao;
 import com.example.demo.util.*;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,8 +29,11 @@ public class UserServiceImpl implements UserService{
     @Autowired
     private RoleDao roleDao;
 
+    @Autowired
+    private JwtUtil jwtUtil;
+
     @Override
-    public void insertUser(SysUser user) {
+    public void insertUser(SysUser user, HttpServletRequest request) {
 
         String password = user.getPassword();
 
@@ -37,7 +42,8 @@ public class UserServiceImpl implements UserService{
 
         user.setStatus(ConstantUtil.USE);
 
-        String name = userDao.findByUserName(RoleUtil.getUserName(), ConstantUtil.USE).getName();
+        //String name = userDao.findByUserName(RoleUtil.getUserName(), ConstantUtil.USE).getName();
+        String name = jwtUtil.getNameFromToken(request);
 
         user.setCreatedBy(name);
         user.setLastModifiedBy(name);
@@ -55,9 +61,10 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public void updateUser(SysUser user) {
+    public void updateUser(SysUser user, HttpServletRequest request) {
 
-        String name = userDao.findByUserName(RoleUtil.getUserName(),ConstantUtil.USE).getName();
+        //String name = userDao.findByUserName(RoleUtil.getUserName(),ConstantUtil.USE).getName();
+        String name = jwtUtil.getNameFromToken(request);
 
         user.setLastModifiedBy(name);
 

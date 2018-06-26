@@ -1,9 +1,10 @@
+/*
 package com.example.demo.config;
 
 import com.example.demo.jwt.JwtAuthenticationEntryPoint;
 import com.example.demo.jwt.JwtAuthenticationTokenFilter;
-import com.example.demo.security.CustomUserService;
-import com.example.demo.security.MyFilterSecurityInterceptor;
+import com.example.demo.security.service.CustomUserService;
+import com.example.demo.security.process.MyFilterSecurityInterceptor;
 import com.example.demo.util.MD5Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -33,18 +34,22 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private MyFilterSecurityInterceptor myFilterSecurityInterceptor;
 
-    /*@Autowired
-    SessionRegistry sessionRegistry;*/
+    */
+/*@Autowired
+    SessionRegistry sessionRegistry;*//*
+
 
     @Autowired
     private JwtAuthenticationEntryPoint unauthorizedHandler;
 
-    /*@Autowired
+    */
+/*@Autowired
     private TokenProvider tokenProvider;
 
     private JWTConfigurer securityConfigurerAdapter() {
         return new JWTConfigurer(tokenProvider);
-    }*/
+    }*//*
+
 
     @Bean
     UserDetailsService customUserService(){ //注册UserDetailsService 的bean
@@ -56,11 +61,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return new JwtAuthenticationTokenFilter();
     }
 
-    /*@Bean
+    */
+/*@Bean
     public SessionRegistry getSessionRegistry(){
         SessionRegistry sessionRegistry = new SessionRegistryImpl();
         return sessionRegistry;
-    }*/
+    }*//*
+
 
     @Bean
     @Override
@@ -86,7 +93,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        /*http.authorizeRequests()
+        */
+/*http.authorizeRequests()
                 .antMatchers("/auth/login").permitAll()
                 .antMatchers("/login").permitAll()
                 .antMatchers("/logout").permitAll()
@@ -112,7 +120,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .sessionManagement().maximumSessions(1).sessionRegistry(sessionRegistry); //注销行为任意访问
         http.addFilterBefore(myFilterSecurityInterceptor, FilterSecurityInterceptor.class)
-            .csrf().disable();*/
+            .csrf().disable();*//*
+
 
         http.csrf()
             .disable()
@@ -142,3 +151,4 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.headers().cacheControl();
     }
 }
+*/
