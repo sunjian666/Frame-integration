@@ -1,6 +1,7 @@
 package com.example.demo.config;
 
 import com.example.demo.security.service.CustomUserService;
+import com.example.demo.security.service.SocialUserService;
 import com.example.demo.util.MD5Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -11,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
+import org.springframework.social.security.SocialUserDetailsService;
 
 import javax.sql.DataSource;
 
@@ -69,6 +71,12 @@ public class AuthenticationBeanConfig {
     @ConditionalOnMissingBean(UserDetailsService.class)
     public UserDetailsService userDetailsService(){
         return new CustomUserService();
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(SocialUserDetailsService.class)
+    public SocialUserDetailsService socialUserDetailsService(){
+        return new SocialUserService();
     }
 
     /**

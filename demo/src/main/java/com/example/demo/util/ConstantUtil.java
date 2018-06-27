@@ -22,6 +22,11 @@ public class ConstantUtil {
     public static final String DEFAULT_SIGN_IN_PROCESSING_URL_MOBILE = "/authentication/mobile";
 
     /**
+     * 默认的OPENID登录请求处理url
+     */
+    public static final String DEFAULT_SIGN_IN_PROCESSING_URL_OPENID = "/authentication/openid";
+
+    /**
      * 验证图片验证码时，http请求中默认的携带图片验证码信息的参数的名称
      */
     public static final String DEFAULT_PARAMETER_NAME_CODE_IMAGE = "imageCode";
@@ -39,6 +44,20 @@ public class ConstantUtil {
      * 默认的处理验证码的url前缀
      */
     public static final String DEFAULT_VALIDATE_CODE_URL_PREFIX = "/code";
+
+    /**
+     * openid参数名
+     */
+    public static final String DEFAULT_PARAMETER_NAME_OPENID = "openId";
+    /**
+     * providerId参数名
+     */
+    public static final String DEFAULT_PARAMETER_NAME_PROVIDERID = "providerId";
+
+    /**
+     * 获取第三方用户信息的url
+     */
+    public static final String DEFAULT_SOCIAL_USER_INFO_URL = "/social/signUp";
 
 
 }
